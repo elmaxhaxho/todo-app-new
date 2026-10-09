@@ -103,7 +103,6 @@ export class DashboardService {
       .select('_id archived')
       .lean();
 
-    console.log('========== EMPLOYEE DASHBOARD ==========');
     console.log('Employee ID:', user._id);
     console.log('Employee ID type:', typeof user._id);
     console.log('Workspace ID:', workspaceId);

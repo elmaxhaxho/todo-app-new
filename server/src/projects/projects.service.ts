@@ -52,7 +52,6 @@ export class ProjectsService {
         })
         .sort({ createdAt: -1 });
 
-    // Manually populate members since populate() isn't working
     const allMemberIds = projects.flatMap((p: any) => p.members || []);
     const usersMap = new Map();
     
@@ -61,10 +60,9 @@ export class ProjectsService {
       users.forEach((u: any) => usersMap.set(u._id.toString(), u));
     }
 
-    // Use JSON serialization to properly convert documents
     const serializedProjects = projects.map((p: any) => {
       const serialized = JSON.parse(JSON.stringify(p));
-      // Replace member IDs with actual user objects
+
       serialized.members = (serialized.members || []).map((id: string) => usersMap.get(id) || id);
       return serialized;
     });
