@@ -24,17 +24,13 @@ export default function TaskBoard({
   };
 
   const handleDragOver = (e) => {
-    if (!isAdmin) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-    }
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
   };
 
   const handleDragEnter = (e, status) => {
-    if (!isAdmin) {
-      e.preventDefault();
-      setDragOverColumn(status);
-    }
+    e.preventDefault();
+    setDragOverColumn(status);
   };
 
   const handleDragLeave = (e) => {
@@ -46,11 +42,11 @@ export default function TaskBoard({
   const handleDrop = (e, status) => {
     e.preventDefault();
     setDragOverColumn(null);
-    if (!isAdmin) {
-      const taskId = e.dataTransfer.getData('text/plain');
-      if (taskId) {
-        onTaskStatusChange(taskId, status);
-      }
+
+    const taskId = e.dataTransfer.getData('text/plain');
+
+    if (taskId) {
+      onTaskStatusChange(taskId, status);
     }
   };
 
@@ -111,3 +107,4 @@ export default function TaskBoard({
     </div>
   );
 }
+

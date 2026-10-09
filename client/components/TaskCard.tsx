@@ -1,27 +1,33 @@
 'use client';
 
-export default function TaskCard({ task, isAdmin, onArchiveTask, onDeleteTask }: any) {
+export default function TaskCard({
+  task,
+  isAdmin,
+  onArchiveTask,
+  onDeleteTask,
+}: any) {
   const getMemberInitials = (m: any) => {
-    if (!m) return '??';
-    const name = m.name || m.email || '';
+    const name = m?.name || m?.email || '';
+
     if (name.length >= 2) {
       return name.slice(0, 2).toUpperCase();
     }
+
     if (name.length === 1) {
       return name.toUpperCase();
     }
+
     return '??';
   };
 
   const handleDragStart = (e: any) => {
-    if (isAdmin) return;
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', task._id);
-    e.target.classList.add('dragging');
+    e.currentTarget.classList.add('dragging');
   };
 
   const handleDragEnd = (e: any) => {
-    e.target.classList.remove('dragging');
+    e.currentTarget.classList.remove('dragging');
   };
 
   const assigned = task.assignedTo;
@@ -29,12 +35,13 @@ export default function TaskCard({ task, isAdmin, onArchiveTask, onDeleteTask }:
   return (
     <div
       className="task-card"
-      draggable={!isAdmin}
+      draggable={true}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
       <div className="task-card-top">
         <h4>{task.title}</h4>
+
         {isAdmin && (
           <div className="task-actions">
             <button
@@ -44,6 +51,7 @@ export default function TaskCard({ task, isAdmin, onArchiveTask, onDeleteTask }:
             >
               ▢
             </button>
+
             <button
               className="task-delete"
               title="Delete task"
@@ -54,7 +62,9 @@ export default function TaskCard({ task, isAdmin, onArchiveTask, onDeleteTask }:
           </div>
         )}
       </div>
+
       {task.description && <p>{task.description}</p>}
+
       {task.label && task.label !== 'General' && (
         <span
           style={{
@@ -71,9 +81,13 @@ export default function TaskCard({ task, isAdmin, onArchiveTask, onDeleteTask }:
           {task.label}
         </span>
       )}
+
       {assigned && (
         <div className="task-footer">
-          <div className="task-avatar" title={assigned.name || assigned.email || 'Unknown'}>
+          <div
+            className="task-avatar"
+            title={assigned.name || assigned.email || 'Unknown'}
+          >
             {getMemberInitials(assigned)}
           </div>
         </div>
@@ -81,3 +95,4 @@ export default function TaskCard({ task, isAdmin, onArchiveTask, onDeleteTask }:
     </div>
   );
 }
+
