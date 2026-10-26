@@ -56,6 +56,8 @@ export default function Home() {
           {currentSection === 'dashboard' && (
             <Dashboard
               isAdmin={isAdmin}
+              username={user?.name || 'there'}
+              onNavigate={setCurrentSection}
             />
           )}
 

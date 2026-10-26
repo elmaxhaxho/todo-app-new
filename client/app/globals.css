@@ -467,18 +467,17 @@ body {
     color: #7E5AFE;
     background: rgba(126, 90, 254, 0.07);
 }
-
 .modal {
-    display: flex;
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    justify-content: center;
+    display: flex;
     align-items: center;
-    z-index: 1000;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 9999;
+    animation: modal-backdrop-enter 180ms ease both;
 }
 
 .modal-content {
@@ -955,7 +954,7 @@ body.dark-mode .multi-select {
 }
 
 body.dark-mode .modal {
-    background-color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(0, 0, 0, 0.75);
 }
 
 body.dark-mode .modal-content {
@@ -1047,7 +1046,7 @@ body.dark-mode .employee-selector::-webkit-scrollbar-thumb:hover {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background-color: rgba(0, 0, 0, 0.45);
+    background-color: rgba(0, 0, 0, 0.65);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1273,3 +1272,396 @@ body.dark-mode .profile-loading {
     background: #1b2130;
     color: #f1f1f5;
 }
+
+/* FIX: "both" -> "backwards" so no transform is left on the element after the
+   animation ends (a leftover transform traps position:fixed modals inside it) */
+.dashboard-page { animation: dashboard-enter 260ms ease backwards; }
+.dashboard-welcome {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  margin-bottom: 26px;
+}
+.dashboard-welcome h1 { margin: 0 0 7px; color: var(--text-primary, #202235); font-size: 28px; letter-spacing: -0.7px; }
+.dashboard-welcome h1 span { color: #7E5AFE; font-size: 20px; }
+.dashboard-welcome p { margin: 0; color: #85889a; font-size: 13px; }
+.dashboard-welcome .dashboard-eyebrow { margin-bottom: 8px; color: #7E5AFE; font-size: 10px; font-weight: 800; letter-spacing: 1.4px; }
+.dashboard-primary-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-height: 40px;     padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600;
+  background: #7E5AFE; color: #fff; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(126,90,254,.18);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+.dashboard-primary-btn:hover { transform: translateY(-2px); background: #7048f0; box-shadow: 0 7px 18px rgba(126,90,254,.25); }
+.dashboard-primary-btn:active { transform: translateY(0) scale(.98); }
+.dashboard-cards { margin-bottom: 24px; }
+.dashboard-stat-card {
+  position: relative; display: flex; align-items: flex-start; gap: 14px; width: 100%;
+  min-height: 112px; padding: 18px; border: 1px solid rgba(128,133,160,.12);
+  border-radius: 13px; text-align: left; cursor: pointer; color: inherit;
+  box-shadow: 0 3px 12px rgba(35,42,72,.035);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.dashboard-stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(35,42,72,.09); border-color: rgba(126,90,254,.3); }
+.dashboard-stat-card:focus-visible, .dashboard-project-row:focus-visible, .dashboard-task-summary button:focus-visible {
+  outline: 3px solid rgba(126,90,254,.45); outline-offset: 3px;
+}
+.dashboard-stat-icon {
+  display: inline-flex; flex: 0 0 38px; width: 38px; height: 38px; align-items: center; justify-content: center;
+  border-radius: 11px; font-size: 19px; font-weight: 700;
+}
+.dashboard-stat-icon.purple { color: #7E5AFE; background: #F0EBFF; }
+.dashboard-stat-icon.blue { color: #4777D8; background: #EAF1FF; }
+.dashboard-stat-icon.green { color: #23966C; background: #E5F7EF; }
+.dashboard-stat-icon.orange { color: #C78328; background: #FFF3E2; }
+.dashboard-stat-icon.slate { color: #68738B; background: #EDF0F6; }
+.dashboard-stat-icon.pink { color: #C05E91; background: #FCEAF3; }
+.dashboard-stat-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; align-items: flex-start; gap: 4px; }
+.dashboard-stat-label { color: #777D90; font-size: 12px; font-weight: 600; }
+.dashboard-stat-copy strong { color: #24283B; font-size: 27px; line-height: 1.1; letter-spacing: -.5px; }
+.dashboard-stat-link { margin-top: 3px; color: #7E5AFE; font-size: 11px; font-weight: 650; opacity: .78; }
+.dashboard-stat-card:hover .dashboard-stat-link { opacity: 1; }
+.dashboard-content-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .85fr); gap: 20px; align-items: start; }
+.dashboard-panel { min-width: 0; padding: 21px; border: 1px solid rgba(128,133,160,.12); border-radius: 14px; background: #fff; box-shadow: 0 3px 14px rgba(35,42,72,.035); }
+.dashboard-panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.dashboard-panel-heading h2 { margin: 0 0 5px; color: #25283A; font-size: 16px; letter-spacing: -.2px; }
+.dashboard-panel-heading p { margin: 0; color: #8A8EA0; font-size: 11px; }
+.dashboard-text-btn { border: 0; padding: 4px 0; background: transparent; color: #7E5AFE; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.dashboard-text-btn:hover { color: #5F3BE0; text-decoration: underline; text-underline-offset: 3px; }
+.dashboard-task-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
+.dashboard-task-summary button { display: flex; align-items: center; gap: 7px; min-width: 0; padding: 10px 9px; border: 1px solid #EFF0F6; border-radius: 9px; background: #FAFAFD; color: #777D90; font-size: 10px; cursor: pointer; text-align: left; }
+.dashboard-task-summary button strong { margin-left: auto; color: #303347; font-size: 12px; }
+.task-summary-dot, .dashboard-task-status { flex: 0 0 7px; width: 7px; height: 7px; border-radius: 50%; background: #A1A5B5; }
+.task-summary-dot.progress-dot, .dashboard-task-status.status-in-progress { background: #7E5AFE; }
+.task-summary-dot.done-dot, .dashboard-task-status.status-done { background: #32A879; }
+.dashboard-task-list { display: flex; flex-direction: column; }
+.dashboard-task-row { display: flex; align-items: center; gap: 11px; padding: 13px 0; border-bottom: 1px solid #F0F1F6; }
+.dashboard-task-row:last-child { border-bottom: 0; }
+.dashboard-task-status { flex-basis: 9px; width: 9px; height: 9px; }
+.dashboard-task-main { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 4px; }
+.dashboard-task-main strong { overflow: hidden; color: #303347; font-size: 12px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+.dashboard-task-main span { overflow: hidden; color: #9296A5; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.dashboard-task-row select { max-width: 112px; padding: 6px 7px; border: 1px solid #E9EAF2; border-radius: 7px; background: #fff; color: #686D80; font-size: 10px; cursor: pointer; }
+.dashboard-task-row select:disabled { opacity: .55; cursor: wait; }
+.dashboard-project-list { display: flex; flex-direction: column; }
+.dashboard-project-row { display: flex; align-items: center; gap: 11px; width: 100%; padding: 14px 0; border: 0; border-bottom: 1px solid #F0F1F6; background: transparent; text-align: left; cursor: pointer; }
+.dashboard-project-row:last-child { border-bottom: 0; }
+.dashboard-project-mark { display: flex; flex: 0 0 37px; width: 37px; height: 37px; align-items: center; justify-content: center; border-radius: 10px; background: #F0EBFF; color: #7E5AFE; font-size: 11px; font-weight: 800; }
+.dashboard-project-details { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 5px; }
+.dashboard-project-details strong { overflow: hidden; color: #303347; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.dashboard-project-details > span:not(.dashboard-progress-track) { color: #8A8EA0; font-size: 10px; }
+.dashboard-progress-track { display: block; width: 100%; height: 5px; overflow: hidden; border-radius: 20px; background: #EEEFF6; }
+.dashboard-progress-track > span { display: block; height: 100%; border-radius: inherit; background: #7E5AFE; transition: width 260ms ease; }
+.dashboard-project-arrow { color: #A1A4B2; font-size: 15px; transition: color 160ms ease, transform 160ms ease; }
+.dashboard-project-row:hover .dashboard-project-arrow { color: #7E5AFE; transform: translate(2px,-2px); }
+.dashboard-empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 27px 12px; text-align: center; }
+.dashboard-empty-state > span { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; margin-bottom: 10px; border-radius: 12px; background: #F0EBFF; color: #7E5AFE; font-size: 18px; }
+.dashboard-empty-state strong { color: #34364A; font-size: 12px; }
+.dashboard-empty-state p { max-width: 230px; margin: 6px 0 10px; color: #8A8EA0; font-size: 11px; line-height: 1.6; }
+.dashboard-empty-state.compact { padding: 22px 8px; }
+.dashboard-notice { margin: -8px 0 18px; padding: 10px 12px; border: 1px solid #CDEBDD; border-radius: 9px; background: #F0FBF5; color: #207A56; font-size: 12px; }
+.dashboard-notice.is-error { border-color: #F4D4D4; background: #FFF4F4; color: #B64141; }
+.dashboard-message { padding: 18px; border-radius: 12px; background: #fff; }
+.dashboard-message p { color: #85889a; font-size: 12px; }
+.dashboard-message-error { border: 1px solid #F4D4D4; }
+.dashboard-skeleton { min-height: 112px; animation: dashboard-pulse 1.25s ease-in-out infinite; background: linear-gradient(90deg,#fff 25%,#f3f2fa 45%,#fff 65%); background-size: 220% 100%; }
+.dashboard-skeleton:nth-child(2) { animation-delay: 100ms; }
+.dashboard-skeleton:nth-child(3) { animation-delay: 200ms; }
+.dashboard-skeleton:nth-child(4) { animation-delay: 300ms; }
+@keyframes dashboard-pulse { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+@keyframes dashboard-enter { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+body.dark-mode .dashboard-welcome h1,
+body.dark-mode .dashboard-stat-copy strong,
+body.dark-mode .dashboard-panel-heading h2,
+body.dark-mode .dashboard-task-main strong,
+body.dark-mode .dashboard-task-summary button strong,
+body.dark-mode .dashboard-project-details strong,
+body.dark-mode .dashboard-empty-state strong { color: #F0F1F8; }
+body.dark-mode .dashboard-panel,
+body.dark-mode .dashboard-stat-card,
+body.dark-mode .dashboard-message { background: #1B2130; border-color: #2A3143; }
+body.dark-mode .dashboard-stat-label,
+body.dark-mode .dashboard-panel-heading p,
+body.dark-mode .dashboard-welcome p,
+body.dark-mode .dashboard-task-main span,
+body.dark-mode .dashboard-project-details > span:not(.dashboard-progress-track),
+body.dark-mode .dashboard-empty-state p { color: #A7ADBF; }
+body.dark-mode .dashboard-task-row { border-color: #2A3143; }
+body.dark-mode .dashboard-task-summary button,
+body.dark-mode .dashboard-task-row select { background: #222A3B; border-color: #333B50; color: #CDD2E1; }
+body.dark-mode .dashboard-project-row { border-color: #2A3143; }
+body.dark-mode .dashboard-progress-track { background: #30384B; }
+body.dark-mode .dashboard-skeleton { background: linear-gradient(90deg,#1B2130 25%,#252D40 45%,#1B2130 65%); background-size: 220% 100%; }
+
+
+
+
+
+.page-section {
+    animation: section-enter 280ms ease backwards;
+}
+
+@keyframes section-enter{
+    from{
+        opacity: 0;
+        transform: translateY(7px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-header{
+    animation: section-enter 320ms ease backwards;
+}
+
+.content-header h1{
+    transition: color 180ms ease;
+}
+
+.new-project-btn,
+.btn-primary,
+.btn-secondary{
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease,
+        background-color 160ms ease,
+        border-color 160ms ease;
+}
+
+
+.new-project-btn:hover,
+.btn-primary:hover,
+.btn-secondary:hover {
+    transform: translateY(-2px);
+}
+
+.new-project-btn:active,
+.btn-primary:active,
+.btn-secondary:active{
+    transform: translateY(0) scale(0.98);
+}
+
+.new-project-btn:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.project-actions button:focus-visible,
+.user-actions button:focus-visible{
+    outline: 3px solid rgba(126, 90, 254, 0.4);
+    outline-offset: 3px;
+}
+
+
+.projects {
+    animation: section-enter 300ms ease backwards;
+}
+
+.project-board{
+    animation: card-enter 350ms ease backwards;
+    transition:
+        transform 200ms ease,
+        box-shadow 200ms ease,
+        border-color 200ms ease;
+}
+
+.project-board:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(35,42,72,.09);
+}
+
+.admin-list{
+    animation: section-enter 300ms ease backwards;
+}
+
+.admin-card{
+    animation: card-enter 380ms ease backwards;
+    transition:
+        transform 190ms ease,
+        box-shadow 190ms ease,
+        border-color 190ms ease,
+        background-color 190ms ease;
+}
+
+.admin-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 9px 22px rgba(35,42,72,.09);
+    border-color: rgba(126, 90, 254, 0.35);
+}
+
+.admin-card:nth-child(1),
+.project-board:nth-child(1) {
+    animation-delay: 30ms;
+}
+
+
+.admin-card:nth-child(2),
+.project-board:nth-child(2){
+    animation-delay: 70ms;
+}
+
+.admin-card:nth-child(3),
+.project-board:nth-child(3) {
+    animation-delay: 110ms;
+}
+
+
+.admin-card:nth-child(4),
+.project-board:nth-child(4) {
+    animation-delay: 150ms;
+}
+
+
+.admin-card:nth-child(5),
+.project-board:nth-child(5) {
+    animation-delay: 190ms;
+}
+
+
+@keyframes card-enter {
+    from {
+        opacity: 0;
+        transform: translateY(9px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.project-actions button,
+.user-actions button,
+.archive-project,
+.delete-project{
+    transition:
+        transform 150ms ease,
+        box-shadow 150ms ease,
+        background-color 150ms ease,
+        color 150ms ease;
+}
+
+
+.project-actions button:hover,
+.user-actions button:hover,
+.archive-project:active,
+.delete-project:active{
+    transform : scale(0.97);
+}
+
+/* Modals stay on "both": the modal itself is the fixed element, so this is fine */
+.modal {
+    animation: modal-backdrop-enter 180ms ease both;
+}
+
+.modal-content {
+    animation: modal-content-enter 220ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+    transform-origin:center;
+}
+
+
+@keyframes modal-backdrop-enter {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 1;
+    }
+}
+
+@keyframes modal-content-enter {
+    from {
+        opacity: 0; 
+        transform: translateY(10px) scale(0.985);
+    } to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+body.dark-mode .admin-card:hover,
+body.dark-mode .project-board:hover {
+    border-color: rgba(126, 90, 254, 0.5);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-section,
+    .content-header,
+    .projects,
+    .project-board,
+    .admin-list,
+    .admin-card,
+    .modal,
+    .modal-content{
+        animation: none !important;
+    }
+
+    .new-project-btn,
+    .btn-primary,
+    .btn-secondary,
+    .project-board,
+    .admin-card,
+    .project-actions button,
+    .user-actions button,
+    .archive-project,
+    .delete-project{
+        transition: none !important; /* FIX: was "node" */
+    }
+
+    .project-board:hover,
+    .admin-card:hover,
+    .new-project-btn:hover,
+    .btn-primary:hover,
+    .btn-secondary:hover { /* FIX: was ".btn-seconary" */
+        transform: none;
+    }
+}
+
+
+
+
+
+@media (max-width: 1100px) {
+  .dashboard-content-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .dashboard-welcome { align-items: flex-start; flex-direction: column; }
+  .dashboard-welcome h1 { font-size: 24px; }
+  .dashboard-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .dashboard-stat-card { min-height: 100px; padding: 13px; gap: 10px; }
+  .dashboard-stat-icon { flex-basis: 32px; width: 32px; height: 32px; border-radius: 9px; font-size: 16px; }
+  .dashboard-stat-copy strong { font-size: 23px; }
+  .dashboard-panel { padding: 15px; }
+  .dashboard-task-summary { gap: 5px; }
+  .dashboard-task-summary button { flex-wrap: wrap; }
+}
+@media (max-width: 420px) {
+  .dashboard-cards { grid-template-columns: minmax(0, 1fr); }
+  .dashboard-task-row { flex-wrap: wrap; }
+  .dashboard-task-row select { margin-left: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-page, .dashboard-stat-card, .dashboard-primary-btn, .dashboard-project-arrow,
+  .dashboard-progress-track > span, .dashboard-skeleton { animation: none !important; transition: none !important; }
+}
+
+
+.task-card { transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, opacity 180ms ease; }
+.task-card:active { cursor: grabbing; }
+.task-card.dragging { opacity: .62; transform: rotate(1deg) scale(1.015); box-shadow: 0 12px 28px rgba(45, 35, 90, .16); }
+.board-column.drag-over { transition: background-color 180ms ease, outline-color 180ms ease, transform 180ms ease; }
+.board-column.drag-over .column-header { color: #7E5AFE; }
+.task-actions button, .add-task-btn, .btn-primary, .btn-secondary {
+  transition: transform 150ms ease, background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.task-actions button:active, .add-task-btn:active, .btn-primary:active, .btn-secondary:active { transform: scale(.97); }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid rgba(126, 90, 254, .38);
+  outline-offset: 2px;
+}
+body.dark-mode .dashboard-stat-icon.purple { background: #30264E; }
+body.dark-mode .dashboard-stat-icon.blue { background: #223451; }
+body.dark-mode .dashboard-stat-icon.green { background: #1D3B34; }
+body.dark-mode .dashboard-stat-icon.orange { background: #453522; }
+body.dark-mode .dashboard-stat-icon.slate { background: #30394B; }
+body.dark-mode .dashboard-stat-icon.pink { background: #452A3B; }
